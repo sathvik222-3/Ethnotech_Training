@@ -1,3 +1,4 @@
+import java.util.Scanner;
 class Student {
     private String name;
     private int studentId;
@@ -116,19 +117,48 @@ class DroneDelivery extends Delivery {
 
 public class StudentFoodOrder {
      public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
         Student student = new Student( "Hemanth",101,1000,90);
-        FoodOrder order = new FoodOrder(1001,"Biryani",150,2);
+        FoodOrder order = new FoodOrder(1001,"Biryani",150,4);
         System.out.println("===== HUNGRY STUDENT =====");
         System.out.println("Student: " + student.getName());
         order.showOrder();
         boolean orderSuccessful = student.orderFood(order);
-        if (orderSuccessful) {
-            Payment payment = new UPI();
+        if (orderSuccessful) { 
+            System.out.print("Select the payment option 1-UPI ,2-CreditCard ,3-Cash :");
+            int paymentOption = sc.nextInt();
+            Payment payment;
+            switch(paymentOption) {
+                case 1:
+                    payment = new UPI();
+                    break;
+                case 2:
+                    payment = new CreditCard();
+                    break;
+                case 3:
+                    payment = new Cash();
+                    break;
+                default:
+                    System.out.println("Invalid payment option!");
+                    return;
+            }
             double total = order.calculateTotal();
             payment.pay(total);
-            Delivery delivery = new BikeDelivery();
-            delivery.deliver();
-            System.out.println("\nOrder placed successfully!");
+            System.out.print("Select the delivery option 1-Bike ,2-Drone :");
+            int deliveryOption = sc.nextInt();
+            Delivery delivery;
+            switch(deliveryOption) {
+                case 1:
+                    delivery = new BikeDelivery();
+                    break;
+                case 2:
+                    delivery = new DroneDelivery();
+                    break;
+                default:
+                    System.out.println("Invalid delivery option!");
+                    return;
+            }
+            System.out.println("Order placed successfully!");
             student.showBalance();
         } else {
             System.out.println("Order failed!");
